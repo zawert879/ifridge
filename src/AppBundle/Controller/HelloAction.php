@@ -142,7 +142,7 @@ class HelloAction extends Controller
         foreach ($emailLogs as $emailLog){
             $result[]=(['id'=>$emailLog->getId(),'to'=>$emailLog->getSetto(),'name'=>$emailLog->getName(),'message'=>$emailLog->getMessage(),'time'=>$emailLog->getTime()]);
         }
-        return new Response(json_encode($result));
+        return new Response(json_encode($result),200);
     }
 
 

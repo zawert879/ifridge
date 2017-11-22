@@ -30,7 +30,6 @@ class Emailing
         $emailLog->setTime(new \DateTime("now"));
         $this->em->persist($emailLog);
         $this->em->flush();
-
     }
 
 }
