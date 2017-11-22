@@ -4,6 +4,10 @@ parameters:
     #parameter_name: value
 
 services:
+    appbundle.emailling:
+        class:     AppBundle\Service\Emailing
+        arguments: ['@mailer','@doctrine.orm.entity_manager']
+        public: true
     # default configuration for services in *this* file
     _defaults:
         # automatically injects dependencies in your services

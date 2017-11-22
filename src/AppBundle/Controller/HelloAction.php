@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 
 use AppBundle\AppBundle;
+use AppBundle\Entity\EmailLog;
 use AppBundle\Entity\Recipe;
 use Doctrine\Common\Annotations\Annotation\Target;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -108,6 +109,40 @@ class HelloAction extends Controller
         $em->remove($recipe);
         $em->flush();
         return new Response(json_encode(['status'=>'ok']));
+    }
+
+    /**
+     * @Route("/api/sendmessage")
+     * @Method("POST")
+     */
+    public function sendMessage(Request $request){
+        $setto = $request->request->get('setto');
+        $message= $request->request->get('message');
+        $name= $request->request->get('name');
+
+//        $emailing = $this->get('AppBundle\Service\Emailing');
+
+          $emailing = $this->container->get('appbundle.emailling');
+        $emailing->sendMessage($setto,$name,$message);
+
+        return new Response(json_encode([
+            'setto'=>$setto,
+            'message'=>$message,
+            'name'=>$name
+        ]));
+
+    }
+    /**
+     * @Route("/api/emails")
+     * @Method("GET")
+     */
+    public function EmailLog(){
+        $emailLogs= $this->getDoctrine()->getRepository(EmailLog::class)->findAll();
+        $result =array();
+        foreach ($emailLogs as $emailLog){
+            $result[]=(['id'=>$emailLog->getId(),'to'=>$emailLog->getSetto(),'name'=>$emailLog->getName(),'message'=>$emailLog->getMessage(),'time'=>$emailLog->getTime()]);
+        }
+        return new Response(json_encode($result));
     }
 
 
